@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    environment {
+        AZURE_FUNCTIONAPP_NAME = 'HelloFunctionNK'
+        AZURE_RESOURCE_GROUP = 'db-nk-rs'
+    }
+
     tools {
         nodejs 'NodeJS 18'
     }
@@ -30,24 +35,16 @@ pipeline {
         }
 
         stage('Deploy to Azure') {
-            agent {
-                docker {
-                    image 'mcr.microsoft.com/azure-cli'
-                }
-            }
-            environment {
-                AZURE_FUNCTIONAPP_NAME = 'HelloFunctionNK'
-                AZURE_RESOURCE_GROUP = 'db-nk-rs'
-            }
             steps {
                 withCredentials([string(credentialsId: 'AZURE_SDK_AUTH_JSON', variable: 'AZURE_JSON')]) {
                     writeFile file: 'azureauth.json', text: AZURE_JSON
                     sh '''
-                        az login --service-principal --sdk-auth < azureauth.json
-                        az functionapp deployment source config-zip \
-                          --resource-group $AZURE_RESOURCE_GROUP \
-                          --name $AZURE_FUNCTIONAPP_NAME \
-                          --src functionapp.zip
+                      curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+                      az login --service-principal --sdk-auth < azureauth.json
+                      az functionapp deployment source config-zip \
+                        --resource-group $AZURE_RESOURCE_GROUP \
+                        --name $AZURE_FUNCTIONAPP_NAME \
+                        --src functionapp.zip
                     '''
                 }
             }

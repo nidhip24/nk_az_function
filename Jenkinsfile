@@ -39,7 +39,6 @@ pipeline {
                 withCredentials([string(credentialsId: 'AZURE_SDK_AUTH_JSON', variable: 'AZURE_JSON')]) {
                     writeFile file: 'azureauth.json', text: AZURE_JSON
                     sh '''
-                      curl -sL https://aka.ms/InstallAzureCLIDeb | bash
                       az login --service-principal --sdk-auth < azureauth.json
                       az functionapp deployment source config-zip \
                         --resource-group $AZURE_RESOURCE_GROUP \

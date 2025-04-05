@@ -29,7 +29,7 @@ pipeline {
                 sh '''
                 mkdir -p package
                 cd package
-                cp -rf ../* ./ 2>/dev/null
+                cp -rf ../Jenkinsfile ../README.md ../host.json ../local.settings.json ../node_modules ../package-lock.json ../package.json ../src ./
                 zip -r ../functionapp.zip .
                 '''
             }

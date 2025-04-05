@@ -39,7 +39,7 @@ pipeline {
                 withCredentials([string(credentialsId: 'AZURE_SDK_AUTH_JSON', variable: 'AZURE_JSON')]) {
                     writeFile file: 'azureauth.json', text: AZURE_JSON
                     sh '''
-                      az login --service-principal --sdk-auth < azureauth.json
+                      az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
                       az functionapp deployment source config-zip \
                         --resource-group $AZURE_RESOURCE_GROUP \
                         --name $AZURE_FUNCTIONAPP_NAME \

@@ -36,7 +36,11 @@ pipeline {
 
         stage('Deploy to Azure') {
             steps {
-                script {
+                withCredentials([
+                    string(credentialsId: 'AZURE_CLIENT_ID', variable: 'AZURE_CLIENT_ID'),
+                    string(credentialsId: 'AZURE_CLIENT_SECRET', variable: 'AZURE_CLIENT_SECRET'),
+                    string(credentialsId: 'AZURE_TENANT_ID', variable: 'AZURE_TENANT_ID')
+                ]) {
                     echo 'Deploying to Azure...'
                     sh '''
                       az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID

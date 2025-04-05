@@ -24,12 +24,6 @@ pipeline {
             }
         }
 
-        stage('Install zip (if needed)') {
-            steps {
-                sh 'sudo apt-get update && sudo apt-get install -y zip'
-            }
-        }
-
         stage('Build Function App Package') {
             steps {
                 sh '''

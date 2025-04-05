@@ -29,7 +29,7 @@ pipeline {
                 sh '''
                 mkdir -p package
                 cd package
-                cp -r ../* ./
+                cp -rf ../* ./ 2>/dev/null
                 zip -r ../functionapp.zip .
                 '''
             }
